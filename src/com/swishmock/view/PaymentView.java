@@ -2,6 +2,10 @@ package com.swishmock.view;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -11,24 +15,55 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-public class PaymentView {
+import com.swishmock.controller.ViewListener;
+
+public class PaymentView implements View {
+
+	private JFrame frame;
+	private JTextField recipientField;
+	private JTextField amountField;
+	private JTextArea messageArea;
+	private JButton phoneBookBtn;
+	private JButton submitBtn;
+
+	private List<ViewListener> viewListeners = new ArrayList<ViewListener>();
 
 	public PaymentView() {
 		initComponents();
 	}
 
+	@Override
+	public void registerViewListener(ViewListener viewListener) {
+		this.viewListeners.add(viewListener);
+	}
+
+	@Override
+	public void initEventListening() {
+		for (ViewListener listener : viewListeners) {
+			submitBtn.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					listener.onViewEvent(e);
+				}
+			});
+		}
+	}
+
+	@Override
+	public void render() {
+		frame.pack();
+		frame.setVisible(true);
+	}
+
 	private void initComponents() {
-		JFrame frame = new JFrame("Swish mock");
+		this.frame = new JFrame("Swish mock");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		JPanel inputPanel = createInputPanel();
-		JPanel buttonPanel = createButtonPanel();
+		JPanel submitPanel = createSubmitPanel();
 
 		frame.add(inputPanel, BorderLayout.CENTER);
-		frame.add(buttonPanel, BorderLayout.SOUTH);
-
-		frame.pack();
-		frame.setVisible(true);
+		frame.add(submitPanel, BorderLayout.SOUTH);
 	}
 
 	private JPanel createInputPanel() {
@@ -36,17 +71,17 @@ public class PaymentView {
 
 		// Recipient
 		JLabel recipientLabel = new JLabel("Recipient:");
-		JTextField recipientField = new JTextField();
-		JButton selectRecipientButton = new JButton("Phone book");
+		this.recipientField = new JTextField();
+		this.phoneBookBtn = new JButton("Phone book");
 
 		inputPanel.add(recipientLabel);
 		inputPanel.add(new JLabel()); // Empty cells to align components in the grid, maybe later use GridBagLayout?
 		inputPanel.add(recipientField);
-		inputPanel.add(selectRecipientButton);
+		inputPanel.add(phoneBookBtn);
 
 		// Amount
 		JLabel amountLabel = new JLabel("Amount:");
-		JTextField amountField = new JTextField();
+		this.amountField = new JTextField();
 
 		inputPanel.add(amountLabel);
 		inputPanel.add(new JLabel());
@@ -55,9 +90,9 @@ public class PaymentView {
 
 		// Message
 		JLabel messageLabel = new JLabel("Message:");
-		JTextArea messageArea = new JTextArea();
-		messageArea.setLineWrap(true);
-		messageArea.setWrapStyleWord(true);
+		this.messageArea = new JTextArea();
+		this.messageArea.setLineWrap(true);
+		this.messageArea.setWrapStyleWord(true);
 
 		inputPanel.add(messageLabel);
 		inputPanel.add(new JLabel());
@@ -67,11 +102,11 @@ public class PaymentView {
 		return inputPanel;
 	}
 
-	private JPanel createButtonPanel() {
-		JPanel buttonPanel = new JPanel(new BorderLayout()); // Use default FlowLayout if want centred button instead
-		JButton submitButton = new JButton("Swish");
-		buttonPanel.add(submitButton); // Add WEST or EAST to push button to either sides
+	private JPanel createSubmitPanel() {
+		JPanel submitPanel = new JPanel(new BorderLayout()); // Use default FlowLayout if want centred button instead
+		this.submitBtn = new JButton("Swish");
+		submitPanel.add(submitBtn); // Add WEST or EAST to push button to either sides
 
-		return buttonPanel;
+		return submitPanel;
 	}
 }
