@@ -3,12 +3,17 @@ package com.swishmock.controller;
 import java.awt.event.ActionEvent;
 
 import com.swishmock.view.View;
+import com.swishmock.model.Payment;
 
 public class PaymentController implements ViewListener {
 
-	public PaymentController(View view) {
+	private Payment model;
+
+	public PaymentController(View view, Payment model) {
 		view.registerViewListener(this);
 		view.initEventListening();
+
+		this.model = model;
 	}
 
 	@Override
