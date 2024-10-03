@@ -15,27 +15,33 @@ public class Payment {
 	}
 
 	public double getAmount() {
-		return amount;
+		return this.amount;
 	}
 
-	public void setAmount(double amount) {
-		this.amount = amount;
+	public void setAmount(double newAmount) {
+		double oldAmount = this.amount;
+		this.amount = newAmount;
+		this.propertyChangeSupport.firePropertyChange("amount", oldAmount, newAmount);
 	}
 
 	public String getTarget() {
-		return target;
+		return this.target;
 	}
 
-	public void setTarget(String target) {
-		this.target = target;
+	public void setTarget(String newTarget) {
+		String oldTarget = this.target;
+		this.target = newTarget;
+		this.propertyChangeSupport.firePropertyChange("target", oldTarget, newTarget);
 	}
 
 	public String getMessage() {
-		return message;
+		return this.message;
 	}
 
-	public void setMessage(String message) {
-		this.message = message;
+	public void setMessage(String newMessage) {
+		String oldMessage = this.message;
+		this.message = newMessage;
+		this.propertyChangeSupport.firePropertyChange("message", oldMessage, newMessage);
 	}
 
 	public void addPropertyChangeListener(PropertyChangeListener listener) {
