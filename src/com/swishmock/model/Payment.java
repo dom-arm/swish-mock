@@ -1,34 +1,50 @@
 package com.swishmock.model;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+
 public class Payment {
 	private double amount;
 	private String target;
 	private String message;
 
-	// TODO: When a phone number is chosen in the phone book, the model has to be
-	// updated, and on this model property change the view in turn has to be updated
+	private final PropertyChangeSupport propertyChangeSupport;
 
-	public double getAmount() {
-		return amount;
+	public Payment() {
+		this.propertyChangeSupport = new PropertyChangeSupport(this);
 	}
 
-	public void setAmount(double amount) {
-		this.amount = amount;
+	public double getAmount() {
+		return this.amount;
+	}
+
+	public void setAmount(double newAmount) {
+		double oldAmount = this.amount;
+		this.amount = newAmount;
+		this.propertyChangeSupport.firePropertyChange("amount", oldAmount, newAmount);
 	}
 
 	public String getTarget() {
-		return target;
+		return this.target;
 	}
 
-	public void setTarget(String target) {
-		this.target = target;
+	public void setTarget(String newTarget) {
+		String oldTarget = this.target;
+		this.target = newTarget;
+		this.propertyChangeSupport.firePropertyChange("target", oldTarget, newTarget);
 	}
 
 	public String getMessage() {
-		return message;
+		return this.message;
 	}
 
-	public void setMessage(String message) {
-		this.message = message;
+	public void setMessage(String newMessage) {
+		String oldMessage = this.message;
+		this.message = newMessage;
+		this.propertyChangeSupport.firePropertyChange("message", oldMessage, newMessage);
+	}
+
+	public void addPropertyChangeListener(PropertyChangeListener listener) {
+		propertyChangeSupport.addPropertyChangeListener(listener);
 	}
 }

@@ -12,8 +12,6 @@ public class Application implements Runnable {
 		View paymentView = new PaymentView();
 		Payment paymentModel = new Payment();
 		PaymentController paymentController = new PaymentController(paymentView, paymentModel);
-
-		paymentView.render();
 	}
 
 	public static void main(String[] args) {

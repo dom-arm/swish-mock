@@ -3,7 +3,7 @@ package com.swishmock.view;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +20,7 @@ import com.swishmock.controller.ViewListener;
 public class PaymentView implements View {
 
 	private JFrame frame;
-	private JTextField recipientField;
+	private JTextField targetField;
 	private JTextField amountField;
 	private JTextArea messageArea;
 	private JButton phoneBookBtn;
@@ -30,29 +30,35 @@ public class PaymentView implements View {
 
 	public PaymentView() {
 		initComponents();
+		render();
 	}
 
 	@Override
 	public void registerViewListener(ViewListener viewListener) {
 		this.viewListeners.add(viewListener);
+		initEventListening();
 	}
 
 	@Override
 	public void initEventListening() {
-		for (ViewListener listener : viewListeners) {
-			submitBtn.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					listener.onViewEvent(e);
-				}
-			});
-		}
+		phoneBookBtn.addActionListener(e -> alertListeners(e));
+		submitBtn.addActionListener(e -> alertListeners(e));
 	}
 
 	@Override
-	public void render() {
-		frame.pack();
-		frame.setVisible(true);
+	public void modelPropertyChange(PropertyChangeEvent e) {
+		if (e.getPropertyName().equals("target")) {
+			String newTarget = e.getNewValue().toString();
+			if (!targetField.getText().equals(newTarget)) {
+				targetField.setText(newTarget);
+			}
+		}
+	}
+
+	private void alertListeners(ActionEvent e) {
+		for (ViewListener listener : viewListeners) {
+			listener.onViewEvent(e);
+		}
 	}
 
 	private void initComponents() {
@@ -71,12 +77,12 @@ public class PaymentView implements View {
 
 		// Recipient
 		JLabel recipientLabel = new JLabel("Recipient:");
-		this.recipientField = new JTextField();
+		this.targetField = new JTextField();
 		this.phoneBookBtn = new JButton("Phone book");
 
 		inputPanel.add(recipientLabel);
 		inputPanel.add(new JLabel()); // Empty cells to align components in the grid, maybe later use GridBagLayout?
-		inputPanel.add(recipientField);
+		inputPanel.add(targetField);
 		inputPanel.add(phoneBookBtn);
 
 		// Amount
@@ -108,5 +114,10 @@ public class PaymentView implements View {
 		submitPanel.add(submitBtn); // Add WEST or EAST to push button to either sides
 
 		return submitPanel;
+	}
+
+	public void render() {
+		frame.pack();
+		frame.setVisible(true);
 	}
 }
