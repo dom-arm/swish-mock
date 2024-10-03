@@ -1,12 +1,18 @@
 package com.swishmock.model;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+
 public class Payment {
 	private double amount;
 	private String target;
 	private String message;
 
-	// TODO: When a phone number is chosen in the phone book, the model has to be
-	// updated, and on this model property change the view in turn has to be updated
+	private final PropertyChangeSupport propertyChangeSupport;
+
+	public Payment() {
+		this.propertyChangeSupport = new PropertyChangeSupport(this);
+	}
 
 	public double getAmount() {
 		return amount;
@@ -30,5 +36,9 @@ public class Payment {
 
 	public void setMessage(String message) {
 		this.message = message;
+	}
+
+	public void addPropertyChangeListener(PropertyChangeListener listener) {
+		propertyChangeSupport.addPropertyChangeListener(listener);
 	}
 }
