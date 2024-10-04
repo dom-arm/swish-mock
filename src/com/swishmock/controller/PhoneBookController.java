@@ -14,32 +14,32 @@ public class PhoneBookController implements ViewListener, PropertyChangeListener
 
 	public PhoneBookController(View view, Payment model) {
 		view.registerViewListener(this);
-		this.view = view;
-
-		view.initPhoneBookBtnEventListening(); // Temporarily for solution
-
 		model.addPropertyChangeListener(this);
+
+		this.view = view;
 		this.model = model;
 	}
 
-	public void changeTarget(String newTarget) {
+	private void changeTarget(String newTarget) {
 		model.setTarget(newTarget);
 	}
 
 	@Override
 	public void onViewEvent(ActionEvent e) {
-		// The PhoneBook button is pressed
-		// Interaction with the Phonebook must start
-		// The logic is in the service
-		this.changeTarget("0702223344");
+		System.out.println("In PBCont " + e.getActionCommand()); // Debug
+
+		if (e.getActionCommand().equals("Phone book")) {
+
+			// Interaction with the Phonebook must start
+			// The logic is in the service later, which returns the chosen target?
+			this.changeTarget("0702223344");
+		}
 	}
 
 	@Override
 	public void propertyChange(PropertyChangeEvent e) {
 		// When the models target property is changed, that phone number must be
-		// rendered in the view's phone number text field. Need to handle that it may
-		// try to update a view with a value that is the same as the current value in
-		// the view already
+		// rendered in the view's phone number text field
 		view.modelPropertyChange(e);
 	}
 }
