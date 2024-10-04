@@ -3,7 +3,6 @@ package com.swishmock.view;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,28 +35,13 @@ public class PaymentView implements View {
 	@Override
 	public void registerViewListener(ViewListener viewListener) {
 		this.viewListeners.add(viewListener);
+		initEventListening();
 	}
 
 	@Override
 	public void initEventListening() {
-		for (ViewListener listener : viewListeners) {
-			submitBtn.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					listener.onViewEvent(e);
-				}
-			});
-		}
-	}
-
-	// Not good. Temporarily
-	public void initPhoneBookBtnEventListening() {
-		phoneBookBtn.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				viewListeners.get(1).onViewEvent(e);
-			}
-		});
+		phoneBookBtn.addActionListener(e -> alertListeners(e));
+		submitBtn.addActionListener(e -> alertListeners(e));
 	}
 
 	@Override
@@ -74,6 +58,12 @@ public class PaymentView implements View {
 	public void render() {
 		frame.pack();
 		frame.setVisible(true);
+	}
+
+	private void alertListeners(ActionEvent e) {
+		for (ViewListener listener : viewListeners) {
+			listener.onViewEvent(e);
+		}
 	}
 
 	private void initComponents() {
