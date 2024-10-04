@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +21,7 @@ import com.swishmock.controller.ViewListener;
 public class PaymentView implements View {
 
 	private JFrame frame;
-	private JTextField recipientField;
+	private JTextField targetField;
 	private JTextField amountField;
 	private JTextArea messageArea;
 	private JButton phoneBookBtn;
@@ -49,6 +50,26 @@ public class PaymentView implements View {
 		}
 	}
 
+	// Not good. Temporarily
+	public void initPhoneBookBtnEventListening() {
+		phoneBookBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				viewListeners.get(1).onViewEvent(e);
+			}
+		});
+	}
+
+	@Override
+	public void modelPropertyChange(PropertyChangeEvent e) {
+		if (e.getPropertyName().equals("target")) {
+			String newTarget = e.getNewValue().toString();
+			if (!targetField.getText().equals(newTarget)) {
+				targetField.setText(newTarget);
+			}
+		}
+	}
+
 	@Override
 	public void render() {
 		frame.pack();
@@ -71,12 +92,12 @@ public class PaymentView implements View {
 
 		// Recipient
 		JLabel recipientLabel = new JLabel("Recipient:");
-		this.recipientField = new JTextField();
+		this.targetField = new JTextField();
 		this.phoneBookBtn = new JButton("Phone book");
 
 		inputPanel.add(recipientLabel);
 		inputPanel.add(new JLabel()); // Empty cells to align components in the grid, maybe later use GridBagLayout?
-		inputPanel.add(recipientField);
+		inputPanel.add(targetField);
 		inputPanel.add(phoneBookBtn);
 
 		// Amount
