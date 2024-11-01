@@ -1,4 +1,4 @@
-package com.swishmock.model;
+package com.swishmock.app.model;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;

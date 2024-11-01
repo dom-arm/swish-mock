@@ -1,4 +1,4 @@
-package com.swishmock.view;
+package com.swishmock.app.view;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
@@ -15,7 +15,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import com.swishmock.controller.ViewListener;
+import com.swishmock.app.controller.ViewListener;
 
 public class PaymentView implements View {
 

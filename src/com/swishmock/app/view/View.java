@@ -1,8 +1,8 @@
-package com.swishmock.view;
+package com.swishmock.app.view;
 
 import java.beans.PropertyChangeEvent;
 
-import com.swishmock.controller.ViewListener;
+import com.swishmock.app.controller.ViewListener;
 
 public interface View {
 	public void registerViewListener(ViewListener listener);

@@ -1,4 +1,4 @@
-package com.swishmock.controller;
+package com.swishmock.app.controller;
 
 import java.awt.event.ActionEvent;
 

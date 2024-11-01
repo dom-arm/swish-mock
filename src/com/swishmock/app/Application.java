@@ -2,10 +2,10 @@ package com.swishmock.app;
 
 import javax.swing.SwingUtilities;
 
-import com.swishmock.controller.PaymentController;
-import com.swishmock.model.Payment;
-import com.swishmock.view.PaymentView;
-import com.swishmock.view.View;
+import com.swishmock.app.controller.PaymentController;
+import com.swishmock.app.model.Payment;
+import com.swishmock.app.view.PaymentView;
+import com.swishmock.app.view.View;
 
 public class Application implements Runnable {
 	public void run() {

@@ -1,11 +1,11 @@
-package com.swishmock.controller;
+package com.swishmock.app.controller;
 
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import com.swishmock.model.Payment;
-import com.swishmock.view.View;
+import com.swishmock.app.model.Payment;
+import com.swishmock.app.view.View;
 
 public class PaymentController implements ViewListener, PropertyChangeListener {
 
