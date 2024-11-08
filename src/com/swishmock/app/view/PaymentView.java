@@ -3,9 +3,9 @@ package com.swishmock.app.view;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.beans.PropertyChangeEvent;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -26,7 +26,7 @@ public class PaymentView implements View {
 	private JButton phoneBookBtn;
 	private JButton submitBtn;
 
-	private List<ViewListener> viewListeners = new ArrayList<ViewListener>();
+	private ViewListener viewListener;
 
 	public PaymentView() {
 		initComponents();
@@ -35,18 +35,38 @@ public class PaymentView implements View {
 
 	@Override
 	public void registerViewListener(ViewListener viewListener) {
-		this.viewListeners.add(viewListener);
+		this.viewListener = viewListener;
 		initEventListening();
 	}
 
 	@Override
 	public void initEventListening() {
-		phoneBookBtn.addActionListener(e -> alertListeners(e));
-		submitBtn.addActionListener(e -> alertListeners(e));
+		targetField.addActionListener(e -> targetTextFieldActionPerformed(e));
+		targetField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				targetTextFieldFocusLost(e);
+			}
+		});
+
+		amountField.addActionListener(e -> amountTextFieldActionPerformed(e));
+		amountField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				amountTextFieldFocusLost(e);
+			}
+		});
+
+		phoneBookBtn.addActionListener(e -> viewListener.onViewEvent(e));
+		submitBtn.addActionListener(e -> viewListener.onViewEvent(e));
 	}
 
 	@Override
 	public void modelPropertyChange(PropertyChangeEvent e) {
+		System.out.println("Hey!: " + e.getPropertyName());
+
+		// Yet only the target field may need to be updated as a result of a property
+		// change that potentially deviates from the current value in the view
 		if (e.getPropertyName().equals("target")) {
 			String newTarget = e.getNewValue().toString();
 			if (!targetField.getText().equals(newTarget)) {
@@ -55,9 +75,27 @@ public class PaymentView implements View {
 		}
 	}
 
-	private void alertListeners(ActionEvent e) {
-		for (ViewListener listener : viewListeners) {
-			listener.onViewEvent(e);
+	private void targetTextFieldActionPerformed(ActionEvent e) {
+		viewListener.onTargetViewEvent(targetField.getText());
+	}
+
+	private void targetTextFieldFocusLost(FocusEvent e) {
+		viewListener.onTargetViewEvent(targetField.getText());
+	}
+
+	private void amountTextFieldActionPerformed(ActionEvent e) {
+		try {
+			viewListener.onAmountViewEvent(Double.parseDouble(amountField.getText()));
+		} catch (NumberFormatException ex) {
+			System.out.println("Here only numeric types can be written. Error: " + ex.toString());
+		}
+	}
+
+	private void amountTextFieldFocusLost(FocusEvent e) {
+		try {
+			viewListener.onAmountViewEvent(Double.parseDouble(amountField.getText()));
+		} catch (NumberFormatException ex) {
+			System.out.println("Here only numeric types can be written. Error: " + ex.toString());
 		}
 	}
 
