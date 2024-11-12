@@ -54,11 +54,11 @@ public class PaymentController implements ViewListener, PropertyChangeListener {
 	public void onViewEvent(ActionEvent e) {
 		System.out.println("Action command: " + e.getActionCommand()); // Debug
 
-		if (e.getActionCommand().equals("Phone book")) {
+		if (e.getActionCommand().equals("Telefonbok")) {
 			// In this case the target value comes from a phone book service, not the view
 			// Therefore, it will be the model property change that will update the view
 			model.setTarget("0702223344");
-		} else if (e.getActionCommand().equals("Swish")) {
+		} else if (e.getActionCommand().equals("Swisha")) {
 			// Call repository method
 			System.out.println("Sends payment");
 		}

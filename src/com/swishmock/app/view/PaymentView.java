@@ -114,9 +114,9 @@ public class PaymentView implements View {
 		JPanel inputPanel = new JPanel(new GridLayout(6, 2));
 
 		// Recipient
-		JLabel recipientLabel = new JLabel("Recipient:");
+		JLabel recipientLabel = new JLabel("Mottagare:");
 		this.targetField = new JTextField();
-		this.phoneBookBtn = new JButton("Phone book");
+		this.phoneBookBtn = new JButton("Telefonbok");
 
 		inputPanel.add(recipientLabel);
 		inputPanel.add(new JLabel()); // Empty cells to align components in the grid, maybe later use GridBagLayout?
@@ -124,7 +124,7 @@ public class PaymentView implements View {
 		inputPanel.add(phoneBookBtn);
 
 		// Amount
-		JLabel amountLabel = new JLabel("Amount:");
+		JLabel amountLabel = new JLabel("Belopp:");
 		this.amountField = new JTextField();
 
 		inputPanel.add(amountLabel);
@@ -133,7 +133,7 @@ public class PaymentView implements View {
 		inputPanel.add(new JLabel());
 
 		// Message
-		JLabel messageLabel = new JLabel("Message:");
+		JLabel messageLabel = new JLabel("Meddelande:");
 		this.messageArea = new JTextArea();
 		this.messageArea.setLineWrap(true);
 		this.messageArea.setWrapStyleWord(true);
@@ -148,7 +148,7 @@ public class PaymentView implements View {
 
 	private JPanel createSubmitPanel() {
 		JPanel submitPanel = new JPanel(new BorderLayout()); // Use default FlowLayout if want centred button instead
-		this.submitBtn = new JButton("Swish");
+		this.submitBtn = new JButton("Swisha");
 		submitPanel.add(submitBtn); // Add WEST or EAST to push button to either sides
 
 		return submitPanel;
