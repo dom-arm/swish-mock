@@ -57,14 +57,12 @@ public class PaymentView implements View {
 			}
 		});
 
-		phoneBookBtn.addActionListener(e -> viewListener.onViewEvent(e));
-		submitBtn.addActionListener(e -> viewListener.onViewEvent(e));
+		phoneBookBtn.addActionListener(e -> viewListener.onPhoneBookViewEvent());
+		submitBtn.addActionListener(e -> viewListener.onSubmitViewEvent());
 	}
 
 	@Override
 	public void modelPropertyChange(PropertyChangeEvent e) {
-		System.out.println("Hey!: " + e.getPropertyName());
-
 		// Yet only the target field may need to be updated as a result of a property
 		// change that potentially deviates from the current value in the view
 		if (e.getPropertyName().equals("target")) {

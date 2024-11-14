@@ -1,6 +1,5 @@
 package com.swishmock.app.controller;
 
-import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -43,6 +42,18 @@ public class PaymentController implements ViewListener, PropertyChangeListener {
 	}
 
 	@Override
+	public void onPhoneBookViewEvent() {
+		System.out.println("Pressed the phone book"); // Debug
+
+		// In this case the target value comes from a phone book service, not the view
+		// Therefore, it will be the model property change that will update the view
+		String newTarget = "0702223344";
+		model.setTarget(newTarget);
+
+		// TODO: Validation on phone number from the phone book service
+	}
+
+	@Override
 	public void onAmountViewEvent(double newAmount) {
 		// When an action happens in the view, the affected property gets updated
 		model.setAmount(newAmount);
@@ -51,17 +62,10 @@ public class PaymentController implements ViewListener, PropertyChangeListener {
 	}
 
 	@Override
-	public void onViewEvent(ActionEvent e) {
-		System.out.println("Action command: " + e.getActionCommand()); // Debug
+	public void onSubmitViewEvent() {
+		// Call a repository method
 
-		if (e.getActionCommand().equals("Telefonbok")) {
-			// In this case the target value comes from a phone book service, not the view
-			// Therefore, it will be the model property change that will update the view
-			model.setTarget("0702223344");
-		} else if (e.getActionCommand().equals("Swisha")) {
-			// Call repository method
-			System.out.println("Sends payment");
-		}
+		System.out.println("Submitted payment"); // Debug
 	}
 
 }
