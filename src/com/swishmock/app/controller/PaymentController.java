@@ -1,71 +1,106 @@
 package com.swishmock.app.controller;
 
+import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import javax.swing.JTextField;
+
 import com.swishmock.app.model.Payment;
-import com.swishmock.app.view.View;
+import com.swishmock.app.view.PaymentView;
 
-public class PaymentController implements ViewListener, PropertyChangeListener {
+public class PaymentController implements PropertyChangeListener, ViewListener {
 
-	private final View view;
+	private final PaymentView view;
 	private final Payment model;
 
-	public PaymentController(View view, Payment model) {
-		view.registerViewListener(this);
+	public PaymentController(PaymentView view, Payment model) {
 		model.addPropertyChangeListener(this);
-
-		this.view = view;
 		this.model = model;
+
+		view.setViewListener(this);
+		this.view = view;
 	}
 
 	@Override
-	public void propertyChange(PropertyChangeEvent e) {
+	public void propertyChange(PropertyChangeEvent evt) {
 		// This method gets called when a bound property is changed (from doc on
 		// PropertyChangeListener)
 
-		System.out.println("A bound property were changed: " + e.getPropertyName()); // Debug
+		System.out.println("A bound property were changed: " + evt.getPropertyName()); // Debug
 
-		// If a property gets a new value not by the view, but by a phone book service
-		// or a calculator service, it's important this change on the model is reflected
-		// in the view
-		view.modelPropertyChange(e);
+		// If a property gets a new value not by the input fields in the view, but by a
+		// phone book service or a calculator service, it's important this change on the
+		// model is reflected in the view
+
+//		view.modelPropertyChange(evt);
+
+		// BUG: Cannot use the source for the check, must be the property name, as of
+		// now the fieldTarget is not updated in the view
+		// FIX: to not hard code property names, I may add separate Property change
+		// listeners to properties in the model, and then get all listeners here and
+		// loop through and compare the property names
+		if (evt.getSource() instanceof JTextField textField) {
+			String newValue = evt.getNewValue().toString();
+			if (!textField.getText().equals(newValue)) {
+				textField.setText(newValue);
+			}
+		}
+
 	}
 
 	@Override
-	public void onTargetViewEvent(String newTarget) {
-		// When an action happens in the view, the affected property gets updated
-		// In this case the target value comes from the view
-		model.setTarget(newTarget);
+	public void onActionPerformed(ActionEvent evt) {
+		// When an action happens in the view, the affected property in the model gets
+		// updated
 
-		// TODO: Validation so the setTarget is called only if it's a valid phone number
-	}
+		try {
+			if (evt.getSource() == view.getFieldTarget()) {
+				System.out.println("Input to Target:	" + view.getFieldTarget().getText());
 
-	@Override
-	public void onPhoneBookViewEvent() {
-		System.out.println("Pressed the phone book"); // Debug
+				// TODO: Validation service so the setTarget is called only if it's a valid
+				// phone number
+				model.setTarget(view.getFieldTarget().getText());
+			}
 
-		// In this case the target value comes from a phone book service, not the view
-		// Therefore, it will be the model property change that will update the view
-		String newTarget = "0702223344";
-		model.setTarget(newTarget);
+			else if (evt.getSource() == view.getFieldAmount()) {
+				System.out.println("Input to Amount: 	" + view.getFieldAmount().getText());
 
-		// TODO: Validation on phone number from the phone book service
-	}
+				// TODO: Validation service so the setAmount is called only if it's a valid
+				// amount
+				// BUG: Input <digit>f or <digit>F is being accepted
+				model.setAmount(Double.parseDouble(view.getFieldAmount().getText()));
 
-	@Override
-	public void onAmountViewEvent(double newAmount) {
-		// When an action happens in the view, the affected property gets updated
-		model.setAmount(newAmount);
+			}
 
-		// TODO: Validation so the setAmount is called only if it's a valid amount
-	}
+			else if (evt.getSource() == view.getButtonPhoneBook()) {
+				System.out.println("Pressed the phone book");
 
-	@Override
-	public void onSubmitViewEvent() {
-		// Call a repository method
+				// In this case the phone book service will be invoked and return the chosen
+				// phone number/target, which then will be updated in the model
+				// Therefore, it will be the property change that will update the view
 
-		System.out.println("Submitted payment"); // Debug
+				// TODO: Get phone number from a service
+				model.setTarget("0702223344");
+
+				// TODO: Validation on phone number from the phone book service
+			}
+
+			else if (evt.getSource() == view.getButtonSubmit()) {
+				System.out.println("Submitted payment");
+
+				// TODO: Call a repository method
+			}
+
+			else {
+
+				System.out.println("An unknown source: " + evt.getSource());
+			}
+
+		} catch (NumberFormatException ex) {
+			System.out.println("Here only numeric types can be written. Error: " + ex.toString());
+		}
+
 	}
 
 }

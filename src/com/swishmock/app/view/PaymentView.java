@@ -3,9 +3,7 @@ package com.swishmock.app.view;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.beans.PropertyChangeEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -17,84 +15,48 @@ import javax.swing.JTextField;
 
 import com.swishmock.app.controller.ViewListener;
 
-public class PaymentView implements View {
+public class PaymentView implements ActionListener {
 
 	private JFrame frame;
-	private JTextField targetField;
-	private JTextField amountField;
-	private JTextArea messageArea;
-	private JButton phoneBookBtn;
-	private JButton submitBtn;
+	private JTextField fieldTarget;
+	private JTextField fieldAmount;
+	private JTextArea textAreaMessage;
+	private JButton buttonPhoneBook;
+	private JButton buttonSubmit;
 
 	private ViewListener viewListener;
 
 	public PaymentView() {
 		initComponents();
+		initListeners();
 		render();
 	}
 
-	@Override
-	public void registerViewListener(ViewListener viewListener) {
-		this.viewListener = viewListener;
-		initEventListening();
+	public JTextField getFieldTarget() {
+		return fieldTarget;
 	}
 
-	@Override
-	public void initEventListening() {
-		targetField.addActionListener(e -> targetTextFieldActionPerformed(e));
-		targetField.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusLost(FocusEvent e) {
-				targetTextFieldFocusLost(e);
-			}
-		});
-
-		amountField.addActionListener(e -> amountTextFieldActionPerformed(e));
-		amountField.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusLost(FocusEvent e) {
-				amountTextFieldFocusLost(e);
-			}
-		});
-
-		phoneBookBtn.addActionListener(e -> viewListener.onPhoneBookViewEvent());
-		submitBtn.addActionListener(e -> viewListener.onSubmitViewEvent());
+	public JTextField getFieldAmount() {
+		return fieldAmount;
 	}
 
-	@Override
-	public void modelPropertyChange(PropertyChangeEvent e) {
-		// Yet only the target field may need to be updated as a result of a property
-		// change that potentially deviates from the current value in the view
-		if (e.getPropertyName().equals("target")) {
-			String newTarget = e.getNewValue().toString();
-			if (!targetField.getText().equals(newTarget)) {
-				targetField.setText(newTarget);
-			}
-		}
+	public JButton getButtonPhoneBook() {
+		return buttonPhoneBook;
 	}
 
-	private void targetTextFieldActionPerformed(ActionEvent e) {
-		viewListener.onTargetViewEvent(targetField.getText());
+	public JButton getButtonSubmit() {
+		return buttonSubmit;
 	}
 
-	private void targetTextFieldFocusLost(FocusEvent e) {
-		viewListener.onTargetViewEvent(targetField.getText());
+	public void setViewListener(ViewListener controller) {
+		this.viewListener = controller;
 	}
 
-	private void amountTextFieldActionPerformed(ActionEvent e) {
-		try {
-			viewListener.onAmountViewEvent(Double.parseDouble(amountField.getText()));
-		} catch (NumberFormatException ex) {
-			System.out.println("Here only numeric types can be written. Error: " + ex.toString());
-		}
-	}
-
-	private void amountTextFieldFocusLost(FocusEvent e) {
-		try {
-			viewListener.onAmountViewEvent(Double.parseDouble(amountField.getText()));
-		} catch (NumberFormatException ex) {
-			System.out.println("Here only numeric types can be written. Error: " + ex.toString());
-		}
+	private void initListeners() {
+		fieldTarget.addActionListener(this);
+		fieldAmount.addActionListener(this);
+		buttonPhoneBook.addActionListener(this);
+		buttonSubmit.addActionListener(this);
 	}
 
 	private void initComponents() {
@@ -113,32 +75,32 @@ public class PaymentView implements View {
 
 		// Recipient
 		JLabel recipientLabel = new JLabel("Mottagare:");
-		this.targetField = new JTextField();
-		this.phoneBookBtn = new JButton("Telefonbok");
+		this.fieldTarget = new JTextField();
+		this.buttonPhoneBook = new JButton("Telefonbok");
 
 		inputPanel.add(recipientLabel);
 		inputPanel.add(new JLabel()); // Empty cells to align components in the grid, maybe later use GridBagLayout?
-		inputPanel.add(targetField);
-		inputPanel.add(phoneBookBtn);
+		inputPanel.add(fieldTarget);
+		inputPanel.add(buttonPhoneBook);
 
 		// Amount
 		JLabel amountLabel = new JLabel("Belopp:");
-		this.amountField = new JTextField();
+		this.fieldAmount = new JTextField();
 
 		inputPanel.add(amountLabel);
 		inputPanel.add(new JLabel());
-		inputPanel.add(amountField);
+		inputPanel.add(fieldAmount);
 		inputPanel.add(new JLabel());
 
 		// Message
 		JLabel messageLabel = new JLabel("Meddelande:");
-		this.messageArea = new JTextArea();
-		this.messageArea.setLineWrap(true);
-		this.messageArea.setWrapStyleWord(true);
+		this.textAreaMessage = new JTextArea();
+		this.textAreaMessage.setLineWrap(true);
+		this.textAreaMessage.setWrapStyleWord(true);
 
 		inputPanel.add(messageLabel);
 		inputPanel.add(new JLabel());
-		inputPanel.add(new JScrollPane(messageArea));
+		inputPanel.add(new JScrollPane(textAreaMessage));
 		inputPanel.add(new JLabel());
 
 		return inputPanel;
@@ -146,14 +108,20 @@ public class PaymentView implements View {
 
 	private JPanel createSubmitPanel() {
 		JPanel submitPanel = new JPanel(new BorderLayout()); // Use default FlowLayout if want centred button instead
-		this.submitBtn = new JButton("Swisha");
-		submitPanel.add(submitBtn); // Add WEST or EAST to push button to either sides
+		this.buttonSubmit = new JButton("Swisha");
+		submitPanel.add(buttonSubmit); // Add WEST or EAST to push button to either sides
 
 		return submitPanel;
 	}
 
-	public void render() {
+	private void render() {
 		frame.pack();
 		frame.setVisible(true);
 	}
+
+	@Override
+	public void actionPerformed(ActionEvent evt) {
+		viewListener.onActionPerformed(evt);
+	}
+
 }
