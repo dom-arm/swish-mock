@@ -22,31 +22,28 @@ public class PaymentController implements PropertyChangeListener, ViewListener {
 		this.view = view;
 	}
 
+	private void updateFieldIfChangedValue(JTextField textField, String newValue) {
+		if (!textField.getText().equals(newValue))
+			textField.setText(newValue);
+	}
+
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		// This method gets called when a bound property is changed (from doc on
 		// PropertyChangeListener)
 
-		System.out.println("A bound property were changed: " + evt.getPropertyName()); // Debug
+		System.out.println("A bound property was changed: " + evt.getPropertyName()); // Debug
 
-		// If a property gets a new value not by the input fields in the view, but by a
-		// phone book service or a calculator service, it's important this change on the
-		// model is reflected in the view
+		// If a property gets a new value not by user input in the view but by a phone
+		// book service or calculator service, this change on the model must be
+		// reflected in the view
 
-//		view.modelPropertyChange(evt);
+		String propertyName = evt.getPropertyName();
+		String newValue = evt.getNewValue().toString(); // Note: If it was a double it's now a String
 
-		// BUG: Cannot use the source for the check, must be the property name, as of
-		// now the fieldTarget is not updated in the view
-		// FIX: to not hard code property names, I may add separate Property change
-		// listeners to properties in the model, and then get all listeners here and
-		// loop through and compare the property names
-		if (evt.getSource() instanceof JTextField textField) {
-			String newValue = evt.getNewValue().toString();
-			if (!textField.getText().equals(newValue)) {
-				textField.setText(newValue);
-			}
+		if (propertyName.equals("target")) {
+			updateFieldIfChangedValue(view.getFieldTarget(), newValue);
 		}
-
 	}
 
 	@Override
@@ -56,7 +53,7 @@ public class PaymentController implements PropertyChangeListener, ViewListener {
 
 		try {
 			if (evt.getSource() == view.getFieldTarget()) {
-				System.out.println("Input to Target:	" + view.getFieldTarget().getText());
+				System.out.println("Input to Target:	" + view.getFieldTarget().getText()); // Debug
 
 				// TODO: Validation service so the setTarget is called only if it's a valid
 				// phone number
@@ -64,7 +61,7 @@ public class PaymentController implements PropertyChangeListener, ViewListener {
 			}
 
 			else if (evt.getSource() == view.getFieldAmount()) {
-				System.out.println("Input to Amount: 	" + view.getFieldAmount().getText());
+				System.out.println("Input to Amount: 	" + view.getFieldAmount().getText()); // Debug
 
 				// TODO: Validation service so the setAmount is called only if it's a valid
 				// amount
@@ -74,7 +71,7 @@ public class PaymentController implements PropertyChangeListener, ViewListener {
 			}
 
 			else if (evt.getSource() == view.getButtonPhoneBook()) {
-				System.out.println("Pressed the phone book");
+				System.out.println("Pressed the phone book"); // Debug
 
 				// In this case the phone book service will be invoked and return the chosen
 				// phone number/target, which then will be updated in the model
@@ -87,14 +84,14 @@ public class PaymentController implements PropertyChangeListener, ViewListener {
 			}
 
 			else if (evt.getSource() == view.getButtonSubmit()) {
-				System.out.println("Submitted payment");
+				System.out.println("Submitted payment"); // Debug
 
 				// TODO: Call a repository method
 			}
 
 			else {
 
-				System.out.println("An unknown source: " + evt.getSource());
+				System.out.println("An unknown source: " + evt.getSource()); // Debug
 			}
 
 		} catch (NumberFormatException ex) {
