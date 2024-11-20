@@ -4,14 +4,21 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
 public class Payment {
+	private PropertyChangeSupport propertyChangeSupport;
+
+	public void addPropertyChangeListener(PropertyChangeListener listener) {
+		this.propertyChangeSupport.addPropertyChangeListener(listener);
+	}
+
 	private double amount;
 	private String target;
 	private String message;
 
-	private final PropertyChangeSupport propertyChangeSupport;
-
 	public Payment() {
-		this.propertyChangeSupport = new PropertyChangeSupport(this);
+	}
+
+	public void setPropertyChangeSupport(PropertyChangeSupport propertyChangeSupport) {
+		this.propertyChangeSupport = propertyChangeSupport;
 	}
 
 	public double getAmount() {
@@ -42,9 +49,5 @@ public class Payment {
 		String oldMessage = this.message;
 		this.message = newMessage;
 		this.propertyChangeSupport.firePropertyChange("message", oldMessage, newMessage);
-	}
-
-	public void addPropertyChangeListener(PropertyChangeListener listener) {
-		propertyChangeSupport.addPropertyChangeListener(listener);
 	}
 }

@@ -1,5 +1,7 @@
 package com.swishmock.app;
 
+import java.beans.PropertyChangeSupport;
+
 import javax.swing.SwingUtilities;
 
 import com.swishmock.app.controller.PaymentController;
@@ -10,6 +12,7 @@ public class Application implements Runnable {
 	public void run() {
 		PaymentView paymentView = new PaymentView();
 		Payment paymentModel = new Payment();
+		paymentModel.setPropertyChangeSupport(new PropertyChangeSupport(paymentModel));
 		PaymentController paymentController = new PaymentController(paymentView, paymentModel);
 	}
 
