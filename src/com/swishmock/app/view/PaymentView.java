@@ -17,7 +17,6 @@ import com.swishmock.app.controller.ViewListener;
 
 public class PaymentView implements ActionListener {
 
-	private JFrame frame;
 	private JTextField fieldTarget;
 	private JTextField fieldAmount;
 	private JTextArea textAreaMessage;
@@ -27,9 +26,9 @@ public class PaymentView implements ActionListener {
 	private ViewListener viewListener;
 
 	public PaymentView() {
-		initComponents();
+		JFrame frame = initComponents();
 		initListeners();
-		render();
+		render(frame);
 	}
 
 	public JTextField getFieldTarget() {
@@ -59,8 +58,8 @@ public class PaymentView implements ActionListener {
 		buttonSubmit.addActionListener(this);
 	}
 
-	private void initComponents() {
-		this.frame = new JFrame("Swish mock");
+	private JFrame initComponents() {
+		JFrame frame = new JFrame("Swish mock");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		JPanel inputPanel = createInputPanel();
@@ -68,6 +67,8 @@ public class PaymentView implements ActionListener {
 
 		frame.add(inputPanel, BorderLayout.CENTER);
 		frame.add(submitPanel, BorderLayout.SOUTH);
+
+		return frame;
 	}
 
 	private JPanel createInputPanel() {
@@ -114,7 +115,7 @@ public class PaymentView implements ActionListener {
 		return submitPanel;
 	}
 
-	private void render() {
+	private void render(JFrame frame) {
 		frame.pack();
 		frame.setVisible(true);
 	}
