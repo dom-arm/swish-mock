@@ -1,6 +1,7 @@
 package com.swishmock.app.controller;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.FocusEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -98,6 +99,15 @@ public class PaymentController implements PropertyChangeListener, ViewListener {
 			System.out.println("Here only numeric types can be written. Error: " + ex.toString());
 		}
 
+	}
+
+	@Override
+	public void onFocusLost(FocusEvent evt) {
+		if (evt.getSource() == view.getTextAreaMessage()) {
+			System.out.println("Input to Message:	" + view.getTextAreaMessage().getText()); // Debug
+
+			model.setMessage(view.getTextAreaMessage().getText());
+		}
 	}
 
 }
