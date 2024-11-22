@@ -1,19 +1,45 @@
 # Swish mock
 
-See the About section.
+## About
 
-My own project I'm working on to get started with Java.
+This is a side project I'm working on. It's a desktop application built using Java Swing. My intention with this project is to further deepen my understanding of the Java language and software design principles.
 
-This is a Swing application and I'm using the MVC design pattern.
+## Details
+
+* Built with Java SE 21
+
+## How to run
+
+### Clone the repository
+
+```sh
+git clone https://github.com/dom-arm/swish-mock.git
+```
+
+### Navigate into the project folder
+
+```sh
+cd swish-mock
+```
+
+### Compile the source code
+
+```sh
+javac -d ./out/ ./src/com/swishmock/app/*.java ./src/com/swishmock/app/controller/*.java ./src/com/swishmock/app/model/*.java ./src/com/swishmock/app/view/*.java
+```
+
+### Run the app
+
+```sh
+java -cp ./out/ com.swishmock.app.Application
+```
 
 ## Notice on my workflow
 
-I define an issue/ticket for a feature, then create a branch from that issue.
+To maintain a clean and linear Git history the following workflow is used:
 
-Once the feature is complete I squash the commits, usually into a single commit that represents the change, unless multiple commits are more appropriate. Then I rebase the branch onto main.
-
-I do this to maintain a clean linear history. When rebased and merged I delete the remote branch.
-
-This process means my current/latest work is most often on the feature branch rather than on the main branch in the repository.
-
-I'm considering creating a pull request whenever I create a branch from an issue so that my latest work is linked to it, making it easier for others to inspect and review my code without needing to switch to the feature branch.
+1. Each new feature or fix starts with an issue.
+2. A dedicated branch is created from the issue.
+3. Once the feature is complete, I squash the commits (usually into a single commit unless multiple commits are necessary to represent the change clearly).
+4. The branch is rebased onto the main branch.
+5. After merging I delete the remote branch.
