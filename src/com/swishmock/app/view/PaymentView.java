@@ -34,32 +34,32 @@ public class PaymentView implements ActionListener, FocusListener {
 	}
 
 	public JTextField getFieldTarget() {
-		return this.fieldTarget;
+		return fieldTarget;
 	}
 
 	public JTextField getFieldAmount() {
-		return this.fieldAmount;
+		return fieldAmount;
 	}
 
 	public JTextArea getTextAreaMessage() {
-		return this.textAreaMessage;
+		return textAreaMessage;
 	}
 
 	public JButton getButtonPhoneBook() {
-		return this.buttonPhoneBook;
+		return buttonPhoneBook;
 	}
 
 	public JButton getButtonSubmit() {
-		return this.buttonSubmit;
+		return buttonSubmit;
 	}
 
-	public void setViewListener(ViewListener controller) {
-		this.viewListener = controller;
+	public void setViewListener(ViewListener viewListener) {
+		this.viewListener = viewListener;
 	}
 
 	private void initListeners() {
-		fieldTarget.addActionListener(this);
-		fieldAmount.addActionListener(this);
+		fieldTarget.addFocusListener(this);
+		fieldAmount.addFocusListener(this);
 		textAreaMessage.addFocusListener(this);
 		buttonPhoneBook.addActionListener(this);
 		buttonSubmit.addActionListener(this);
@@ -81,19 +81,19 @@ public class PaymentView implements ActionListener, FocusListener {
 	private JPanel createInputPanel() {
 		JPanel inputPanel = new JPanel(new GridLayout(6, 2));
 
-		// Recipient
-		JLabel recipientLabel = new JLabel("Mottagare:");
-		this.fieldTarget = new JTextField();
-		this.buttonPhoneBook = new JButton("Telefonbok");
+		// Target
+		JLabel targetLabel = new JLabel("Mottagare:");
+		fieldTarget = new JTextField();
+		buttonPhoneBook = new JButton("Telefonbok");
 
-		inputPanel.add(recipientLabel);
+		inputPanel.add(targetLabel);
 		inputPanel.add(new JLabel()); // Empty cells to align components in the grid, maybe later use GridBagLayout?
 		inputPanel.add(fieldTarget);
 		inputPanel.add(buttonPhoneBook);
 
 		// Amount
 		JLabel amountLabel = new JLabel("Belopp:");
-		this.fieldAmount = new JTextField();
+		fieldAmount = new JTextField();
 
 		inputPanel.add(amountLabel);
 		inputPanel.add(new JLabel());
@@ -102,10 +102,10 @@ public class PaymentView implements ActionListener, FocusListener {
 
 		// Message
 		JLabel messageLabel = new JLabel("Meddelande:");
-		this.textAreaMessage = new JTextArea();
-		this.textAreaMessage.setLineWrap(true);
-		this.textAreaMessage.setWrapStyleWord(true);
-		this.textAreaMessage.setColumns(15);
+		textAreaMessage = new JTextArea();
+		textAreaMessage.setLineWrap(true);
+		textAreaMessage.setWrapStyleWord(true);
+		textAreaMessage.setColumns(15);
 
 		inputPanel.add(messageLabel);
 		inputPanel.add(new JLabel());
@@ -117,7 +117,7 @@ public class PaymentView implements ActionListener, FocusListener {
 
 	private JPanel createSubmitPanel() {
 		JPanel submitPanel = new JPanel(new BorderLayout()); // Use default FlowLayout if want centred button instead
-		this.buttonSubmit = new JButton("Swisha");
+		buttonSubmit = new JButton("Swisha");
 		submitPanel.add(buttonSubmit); // Add WEST or EAST to push button to either sides
 
 		return submitPanel;

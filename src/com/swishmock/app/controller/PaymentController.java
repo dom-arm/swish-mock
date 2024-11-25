@@ -49,65 +49,52 @@ public class PaymentController implements PropertyChangeListener, ViewListener {
 
 	@Override
 	public void onActionPerformed(ActionEvent evt) {
-		// When an action happens in the view, the affected property in the model gets
-		// updated
 
-		try {
-			if (evt.getSource() == view.getFieldTarget()) {
-				System.out.println("Input to Target:	" + view.getFieldTarget().getText()); // Debug
+		if (evt.getSource() == view.getButtonPhoneBook()) {
+			System.out.println("Pressed the phone book"); // Debug
 
-				// TODO: Validation service so the setTarget is called only if it's a valid
-				// phone number
-				model.setTarget(view.getFieldTarget().getText());
-			}
+			// In this case the phone book service will be invoked and return the chosen
+			// phone number/target, which then will be updated in the model
+			// Therefore, it will be the property change that will update the view
 
-			else if (evt.getSource() == view.getFieldAmount()) {
-				System.out.println("Input to Amount: 	" + view.getFieldAmount().getText()); // Debug
+			model.setTarget("0702223344"); // Temporary
 
-				// TODO: Validation service so the setAmount is called only if it's a valid
-				// amount
-				// BUG: Input <digit>f or <digit>F is being accepted
-				model.setAmount(Double.parseDouble(view.getFieldAmount().getText()));
+		} else if (evt.getSource() == view.getButtonSubmit()) {
+			System.out.println("Submitted payment"); // Debug
 
-			}
-
-			else if (evt.getSource() == view.getButtonPhoneBook()) {
-				System.out.println("Pressed the phone book"); // Debug
-
-				// In this case the phone book service will be invoked and return the chosen
-				// phone number/target, which then will be updated in the model
-				// Therefore, it will be the property change that will update the view
-
-				// TODO: Get phone number from a service
-				model.setTarget("0702223344");
-
-				// TODO: Validation on phone number from the phone book service
-			}
-
-			else if (evt.getSource() == view.getButtonSubmit()) {
-				System.out.println("Submitted payment"); // Debug
-
-				// TODO: Call a repository method
-			}
-
-			else {
-
-				System.out.println("An unknown source: " + evt.getSource()); // Debug
-			}
-
-		} catch (NumberFormatException ex) {
-			System.out.println("Here only numeric types can be written. Error: " + ex.toString());
+		} else {
+			System.out.println("An unknown source: " + evt.getSource()); // Debug
 		}
 
 	}
 
 	@Override
 	public void onFocusLost(FocusEvent evt) {
-		if (evt.getSource() == view.getTextAreaMessage()) {
+
+		if (evt.getSource() == view.getFieldTarget()) {
+			System.out.println("Input to Target:	" + view.getFieldTarget().getText()); // Debug
+
+			model.setTarget(view.getFieldTarget().getText());
+
+		} else if (evt.getSource() == view.getFieldAmount()) {
+			System.out.println("Input to Amount: 	" + view.getFieldAmount().getText()); // Debug
+
+			// BUG: Input <digit>f or <digit>F is being accepted
+			try {
+				model.setAmount(Double.parseDouble(view.getFieldAmount().getText()));
+			} catch (NumberFormatException ex) {
+				System.out.println("Here only numeric types can be written. Error: " + ex.toString());
+			}
+
+		} else if (evt.getSource() == view.getTextAreaMessage()) {
 			System.out.println("Input to Message:	" + view.getTextAreaMessage().getText()); // Debug
 
 			model.setMessage(view.getTextAreaMessage().getText());
+
+		} else {
+			System.out.println("An unknown source: " + evt.getSource()); // Debug
 		}
+
 	}
 
 }
